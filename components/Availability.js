@@ -11,7 +11,7 @@ export default async function Availability() {
       <div className="wrap">
         <h2>What&apos;s available, and when</h2>
         <p className="lede">
-          Each animal is split into four quarters. Pick the animal and share size that fits, send a
+          Each animal is split into four quarters. Pick the month and share size that fits, send a
           request, and we&apos;ll confirm within a day or two.
         </p>
 
@@ -43,7 +43,7 @@ export default async function Availability() {
                   <div className="when">{slot.when}</div>
                   <div className="ready">
                     {slot.scheduled ? 'Butcher date set' : 'Estimated finish'}
-                    {slot.animals > 1 && <> · {slot.animals} animals</>}
+                    {' · '}{slot.quartersOpen} of {slot.quartersTotal} quarters still open
                     {slot.ready && <> · ready to pick up <b>{slot.ready}</b></>}
                   </div>
                 </div>
