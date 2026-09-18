@@ -2,6 +2,12 @@ import Link from 'next/link';
 import { getAvailability } from '@/lib/availability';
 import { farm, shares, sharesNote, fmtMoney } from '@/lib/content';
 
+function statusLabel(slot) {
+  if (slot.level === 'full') return 'Fully reserved';
+  if (slot.quartersOpen === slot.quartersTotal) return 'All shares open';
+  return 'Some shares reserved';
+}
+
 export default async function Availability() {
   const { ok, slots } = await getAvailability();
   const anyOpen = slots.some((s) => s.level !== 'full');
@@ -11,7 +17,7 @@ export default async function Availability() {
       <div className="wrap">
         <h2>What&apos;s available, and when</h2>
         <p className="lede">
-          Each animal is split into four quarters. Pick the month and share size that fits, send a
+          Shares come as a quarter, half, or whole animal. Pick the month and size that fits, send a
           request, and we&apos;ll confirm within a day or two.
         </p>
 
@@ -43,7 +49,7 @@ export default async function Availability() {
                   <div className="when">{slot.when}</div>
                   <div className="ready">
                     {slot.scheduled ? 'Butcher date set' : 'Estimated finish'}
-                    {' · '}{slot.quartersOpen} of {slot.quartersTotal} quarters still open
+                    {' · '}{statusLabel(slot)}
                     {slot.ready && <> · ready to pick up <b>{slot.ready}</b></>}
                   </div>
                 </div>
@@ -78,7 +84,7 @@ export default async function Availability() {
         </div>
 
         <p className="fine">
-          A typical quarter hangs around {shares[0].hangingLbs} lb (half {shares[1].hangingLbs}, whole {shares[2].hangingLbs}).
+          A typical whole animal hangs around {shares[2].hangingLbs} lb; a half about {shares[1].hangingLbs}, a quarter about {shares[0].hangingLbs}.
           You take home roughly 60–65% of hanging weight as packaged beef, depending on your cut sheet.
         </p>
         <p className="fine">{sharesNote}</p>
