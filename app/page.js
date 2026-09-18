@@ -65,7 +65,6 @@ export default function Home() {
 
       <Availability />
 
-
       <section className="gallery">
         <div className="wrap strip">
           <div style={{ position: 'relative', gridColumn: 'span 2', aspectRatio: '2/1' }}>
@@ -80,12 +79,10 @@ export default function Home() {
         </div>
       </section>
 
-
       <section className="contact" id="reserve">
         <Image src="/images/dusk.jpg" alt="" aria-hidden fill sizes="100vw" style={{ objectFit: 'cover', opacity: 0.55 }} />
         <div className="wrap">
           <h2>{contact.heading}</h2>
-          <p className="lede">{contact.sub}</p>
           <div className="ways">
             <div className="way"><b>Call or text</b><a href={farm.phoneHref}>{farm.phone}</a></div>
             {farm.email && <div className="way"><b>Email</b><a href={`mailto:${farm.email}`}>{farm.email}</a></div>}
