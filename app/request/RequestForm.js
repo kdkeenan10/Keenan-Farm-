@@ -6,15 +6,25 @@ import { farm, shares, fmtMoney } from '@/lib/content';
 export default function RequestForm({ slots, liveData }) {
   const params = useSearchParams();
   const waitlist = params.get('waitlist') === '1' || (liveData && slots.length === 0);
-  const [portion, setPortion] = useState(params.get('portion') || 'Half');
   const [slot, setSlot] = useState(params.get('slot') || (slots[0]?.id ?? ''));
+  const chosen = slots.find((s) => s.id === slot);
+
+  // Only sizes that are actually open on the chosen animal can be picked.
+  const isOpen = (k) => waitlist || !chosen || chosen.open[k];
+  const firstOpen = shares.find((s) => isOpen(s.key))?.key || 'Quarter';
+  const requested = params.get('portion');
+  const [portion, setPortion] = useState(requested && isOpen(requested) ? requested : firstOpen);
   const [state, setState] = useState({ busy: false, err: '', done: false });
 
-  const chosen = slots.find((s) => s.id === slot);
-  const portionOpen = !chosen || chosen.open[portion];
+  function changeSlot(id) {
+    setSlot(id);
+    const s = slots.find((x) => x.id === id);
+    if (s && !s.open[portion]) setPortion(shares.find((sh) => s.open[sh.key])?.key || 'Quarter');
+  }
 
   async function submit(e) {
     e.preventDefault();
+    if (!isOpen(portion)) { setState({ busy: false, err: 'That share size is no longer open on this animal.', done: false }); return; }
     setState({ busy: true, err: '', done: false });
     const fd = new FormData(e.currentTarget);
     const body = {
@@ -47,39 +57,37 @@ export default function RequestForm({ slots, liveData }) {
 
   return (
     <form className="form" onSubmit={submit}>
-      <label>Share size</label>
-      <div className="choices">
-        {shares.map((s) => (
-          <label className="choice" key={s.key}>
-            <input type="radio" name="portion" value={s.key} checked={portion === s.key} onChange={() => setPortion(s.key)} />
-            <b>{s.label}</b>
-            <span>{fmtMoney(s.pricePerLb)} / lb hanging</span>
-          </label>
-        ))}
-      </div>
-
       {!waitlist && slots.length > 0 && (
         <>
-          <label htmlFor="slot">Which animal</label>
-          <select id="slot" value={slot} onChange={(e) => setSlot(e.target.value)}>
+          <label htmlFor="slot">Which month</label>
+          <select id="slot" value={slot} onChange={(e) => changeSlot(e.target.value)}>
             {slots.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.when}{s.scheduled ? '' : ' (estimated)'} — {['Quarter', 'Half', 'Whole'].filter((k) => s.open[k]).join(', ')} open
+                {s.when}{s.scheduled ? '' : ' (estimated)'} — {shares.filter((sh) => s.open[sh.key]).map((sh) => sh.label).join(', ')} open
               </option>
             ))}
           </select>
-          {!portionOpen && (
-            <div className="err">
-              A {portion.toLowerCase()} isn&apos;t open on that animal. Pick a different size or a different date, or send it anyway and we&apos;ll put you on the waitlist for the next one.
-            </div>
-          )}
         </>
       )}
       {waitlist && (
-        <div className="err" style={{ background: 'rgba(30,58,43,.08)', borderColor: 'var(--pasture)', color: 'inherit' }}>
-          You&apos;re joining the waitlist. We&apos;ll reach out as soon as a {portion.toLowerCase()} opens up.
+        <div className="err" style={{ background: 'rgba(62,86,56,.08)', borderColor: 'var(--pasture)', color: 'inherit' }}>
+          You&apos;re joining the waitlist. We&apos;ll reach out as soon as a share opens up.
         </div>
       )}
+
+      <label>Share size</label>
+      <div className="choices">
+        {shares.map((s) => {
+          const open = isOpen(s.key);
+          return (
+            <label className="choice" key={s.key} style={open ? undefined : { opacity: .45, cursor: 'not-allowed' }} aria-disabled={!open}>
+              <input type="radio" name="portion" value={s.key} checked={portion === s.key} disabled={!open} onChange={() => setPortion(s.key)} />
+              <b>{s.label}</b>
+              <span>{open ? `${fmtMoney(s.pricePerLb)} / lb hanging` : 'reserved'}</span>
+            </label>
+          );
+        })}
+      </div>
 
       <div className="row">
         <div><label htmlFor="name">Your name</label><input id="name" name="name" required autoComplete="name" /></div>
