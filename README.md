@@ -42,4 +42,7 @@ creates the customer, order, and cut sheet link.
 
 The site never queries `animals`, `orders`, or `customers`. It only has execute on the two
 functions above. Section 3 of the migration lists the follow-up to lock `anon` out of those
-tables entirely once the cut sheet page reads through a by-token function.
+tables entirely once the cut sheet page reads through a by-token function.         
+
+
+
