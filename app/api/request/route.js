@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { publicConfig } from '@/lib/supabase';
 
 // Cheap in-memory throttle per IP. Vercel functions are ephemeral so this is
 // best-effort, but it stops a single tight loop cold.
@@ -34,11 +35,23 @@ export async function POST(req) {
   if (!phone && !email) return NextResponse.json({ error: 'Please give us a phone number or email.' }, { status: 400 });
   if (!['Quarter', 'Half', 'Whole'].includes(portion)) return NextResponse.json({ error: 'Pick a share size.' }, { status: 400 });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return NextResponse.json({ error: 'Requests are offline right now. Please call or text.' }, { status: 503 });
+  const cfg = publicConfig();
+  if (!cfg) return NextResponse.json({ error: 'Requests are offline right now. Please call or text.' }, { status: 503 });
 
-  const sb = createClient(url, key, { auth: { persistSession: false } });
+  const sb = createClient(cfg.url, cfg.key, { auth: { persistSession: false } });
+
+  // Server-side check: the chosen animal must still have room for this share.
+  // Two people racing for the same half can't both get a "got it".
+  if (slot) {
+    const need = portion === 'Whole' ? 4 : portion === 'Half' ? 2 : 1;
+    const { data: avail } = await sb.rpc('public_availability');
+    const row = (avail || []).find((r) => r.slot_id === slot);
+    if (!row) return NextResponse.json({ error: 'That animal is no longer listed. Please pick another.' }, { status: 409 });
+    if (Number(row.quarters_available) < need) {
+      return NextResponse.json({ error: `A ${portion.toLowerCase()} is no longer open on that animal. Pick a different size or date.` }, { status: 409 });
+    }
+  }
+
   const { error } = await sb.rpc('request_share', {
     p_name: name, p_phone: phone, p_email: email, p_portion: portion, p_slot: slot, p_note: note,
   });
