@@ -43,6 +43,7 @@ export default async function Availability() {
                   <div className="when">{slot.when}</div>
                   <div className="ready">
                     {slot.scheduled ? 'Butcher date set' : 'Estimated finish'}
+                    {slot.animals > 1 && <> · {slot.animals} animals</>}
                     {slot.ready && <> · ready to pick up <b>{slot.ready}</b></>}
                   </div>
                 </div>
