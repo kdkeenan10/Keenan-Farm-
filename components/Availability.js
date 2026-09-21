@@ -8,6 +8,13 @@ function statusLabel(slot) {
   return 'Some shares reserved';
 }
 
+function dateLabel(slot) {
+  if (!slot.ready) return 'Date to be set';
+  return slot.scheduled
+    ? `Butcher date set · pickup about ${slot.ready}`
+    : `Estimated pickup ${slot.ready} · butcher date not set yet`;
+}
+
 export default async function Availability() {
   const { ok, slots } = await getAvailability();
   const anyOpen = slots.some((s) => s.level !== 'full');
@@ -48,9 +55,8 @@ export default async function Availability() {
                 <div>
                   <div className="when">{slot.when}</div>
                   <div className="ready">
-                    {slot.scheduled ? 'Butcher date set' : 'Estimated finish'}
-                    {' · '}{statusLabel(slot)}
-                    {slot.ready && <> · ready to pick up <b>{slot.ready}</b></>}
+                    {dateLabel(slot)}
+                    {' · '}<b>{statusLabel(slot)}</b>
                   </div>
                 </div>
                 <div className="stamps">

@@ -65,6 +65,7 @@ export default function Home() {
 
       <Availability />
 
+
       <section className="gallery">
         <div className="wrap strip">
           <div style={{ position: 'relative', gridColumn: 'span 2', aspectRatio: '2/1' }}>
@@ -78,6 +79,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
 
       <section className="contact" id="reserve">
         <Image src="/images/dusk.jpg" alt="" aria-hidden fill sizes="100vw" style={{ objectFit: 'cover', opacity: 0.55 }} />
