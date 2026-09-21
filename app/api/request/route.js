@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { publicConfig } from '@/lib/supabase';
+import { notifyRequest } from '@/lib/notify';
 
 // Cheap in-memory throttle per IP. Vercel functions are ephemeral so this is
 // best-effort, but it stops a single tight loop cold.
@@ -42,10 +43,12 @@ export async function POST(req) {
 
   // Server-side check: the chosen animal must still have room for this share.
   // Two people racing for the same half can't both get a "got it".
+  let when = null;
   if (slot) {
     const need = portion === 'Whole' ? 4 : portion === 'Half' ? 2 : 1;
     const { data: avail } = await sb.rpc('public_availability');
     const row = (avail || []).find((r) => r.slot_id === slot);
+    if (row) when = row.kill_date || (row.estimated_finish_date ? `est. ${row.estimated_finish_date}` : null);
     if (!row) return NextResponse.json({ error: 'That animal is no longer listed. Please pick another.' }, { status: 409 });
     if (Number(row.quarters_available) < need) {
       return NextResponse.json({ error: `A ${portion.toLowerCase()} is no longer open on that animal. Pick a different size or date.` }, { status: 409 });
@@ -59,5 +62,8 @@ export async function POST(req) {
     console.error('request_share failed', error.message);
     return NextResponse.json({ error: 'Could not save your request. Please call or text.' }, { status: 500 });
   }
+
+  // Saved. Now tell Kevin — but never let a notification failure fail the request.
+  try { await notifyRequest({ name, phone, email, portion, when, note, waitlist: !slot }); } catch (e) { console.error('notify threw', e?.message); }
   return NextResponse.json({ ok: true });
 }
