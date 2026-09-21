@@ -85,7 +85,7 @@ export default async function Availability() {
         )}
 
         <div className="twobills">
-          <div><i>1</i><div><b>You pay us for the share</b><span>Priced per pound of hanging weight — the figures above. A deposit holds your share; the balance is due at pickup.</span></div></div>
+          <div><i>1</i><div><b>You pay us for the share</b><span>Priced per pound of hanging weight — the figures above. A deposit holds your share; the balance is due once the animal is at the butcher and the hanging weight is known.</span></div></div>
           <div><i>2</i><div><b>You pay the butcher for processing</b><span>Cutting, wrapping, and freezing are billed by the butcher and paid to them directly when you pick up. That&apos;s on top of the hanging-weight price. Ask us for their current rate.</span></div></div>
         </div>
 
