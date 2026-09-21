@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Header, Footer } from '@/components/Chrome';
 import Availability from '@/components/Availability';
-import { farm, hero, organic, steps, contact } from '@/lib/content';
+import { farm, hero, organic, steps, faq, contact } from '@/lib/content';
 
 export const revalidate = 300;
 
@@ -80,6 +80,20 @@ export default function Home() {
         </div>
       </section>
 
+
+      <section className="faq" id="faq">
+        <div className="wrap">
+          <h2>Questions people ask</h2>
+          <div className="faq-list">
+            {faq.map((f) => (
+              <details key={f.q}>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="contact" id="reserve">
         <Image src="/images/dusk.jpg" alt="" aria-hidden fill sizes="100vw" style={{ objectFit: 'cover', opacity: 0.55 }} />

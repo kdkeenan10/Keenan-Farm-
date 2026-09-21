@@ -11,6 +11,7 @@ export function Header() {
       <nav>
         <Link href="/#how">How it works</Link>
         <Link href="/#availability">Availability &amp; pricing</Link>
+        <Link href="/#faq">FAQ</Link>
         <Link className="reserve" href="/request">Request a share</Link>
       </nav>
     </header>

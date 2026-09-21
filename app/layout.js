@@ -1,6 +1,7 @@
 import './globals.css';
 import { Archivo, Newsreader } from 'next/font/google';
 import { farm } from '@/lib/content';
+import { Analytics } from '@vercel/analytics/next';
 
 const archivo = Archivo({
   subsets: ['latin'],
@@ -33,7 +34,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${archivo.variable} ${newsreader.variable}`}>
-      <body>{children}</body>
+      <body>{children}<Analytics /></body>
     </html>
   );
 }
