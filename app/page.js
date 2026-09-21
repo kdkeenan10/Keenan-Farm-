@@ -22,8 +22,10 @@ export default function Home() {
         />
         <div className="wrap">
           <h1>Organically<br />Raised Beef</h1>
-          <p className="creed">{hero.sub}</p>
-          <p className="sub2">{hero.sub2}</p>
+          <div className="creed">
+            <p>{hero.sub}</p>
+            <p className="sub2">{hero.sub2}</p>
+          </div>
           <div className="actions">
             <Link className="btn btn-barn" href="/request">Request a share</Link>
             <a className="btn btn-ghost" href="#how">See how it works</a>

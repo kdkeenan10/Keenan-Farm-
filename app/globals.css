@@ -249,7 +249,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem
 
 .creed{margin-top:1.5rem;max-width:46ch;font-family:var(--font-newsreader),Georgia,serif;font-size:clamp(1.15rem,1.7vw,1.5rem);line-height:1.4;color:#F4EFE3;
   background:rgba(43,58,41,.62);backdrop-filter:blur(2px);padding:1.1rem 1.3rem;border-top:3px solid var(--apricot);border-radius:2px}
-.hero .sub2{margin-top:.9rem;font-size:1rem;opacity:.85;font-family:var(--font-newsreader),Georgia,serif}
+.creed p{margin:0}
+.creed .sub2{margin-top:.85rem;padding-top:.75rem;border-top:1px solid rgba(255,255,255,.28);font-size:1rem;line-height:1.4;opacity:.92}
 
 
 /* ---------- logo ---------- */
