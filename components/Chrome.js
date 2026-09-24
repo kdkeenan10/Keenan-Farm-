@@ -9,6 +9,7 @@ export function Header() {
         <Image src="/images/logo.png" alt={farm.legalName} width={289} height={198} priority className="brand-logo" />
       </Link>
       <nav>
+        <Link href="/beef-shares">Beef shares</Link>
         <Link href="/#how">How it works</Link>
         <Link href="/#availability">Availability &amp; pricing</Link>
         <Link href="/#faq">FAQ</Link>

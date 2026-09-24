@@ -3,7 +3,11 @@ import { Header, Footer } from '@/components/Chrome';
 import { getAvailability } from '@/lib/availability';
 import RequestForm from './RequestForm';
 
-export const metadata = { title: 'Request a share — Keenan Farm' };
+export const metadata = {
+  title: 'Request a Beef Share',
+  description: 'Request a quarter, half, or whole beef share from Keenan Land & Cattle in Caledonia, NY. Pick the month and size; we confirm within a day or two and nothing is charged until you hear from us.',
+  alternates: { canonical: 'https://keenanfarm.com/request' },
+};
 export const revalidate = 300;
 
 export default async function RequestPage() {

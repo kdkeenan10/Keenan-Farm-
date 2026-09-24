@@ -20,15 +20,12 @@ const newsreader = Newsreader({
 });
 
 export const metadata = {
-  title: `${farm.name} — Organically raised beef shares, ${farm.town}`,
-  description:
-    'Organically raised, grass and grain fed beef from a small family farm in Caledonia, NY. Request a quarter, half, or whole share.',
+  title: { default: 'Keenan Land & Cattle — Beef Shares, Caledonia, NY', template: '%s | Keenan Land & Cattle' },
+  description: 'Small family farm in Caledonia, NY. Quarter, half, and whole beef shares from cattle raised on organic pasture with certified organic grain.',
   metadataBase: new URL('https://keenanfarm.com'),
-  openGraph: {
-    title: `${farm.name} — Organically raised beef shares`,
-    description: 'Small family farm in Caledonia, NY. Quarter, half, and whole shares.',
-    images: ['/images/hero.jpg'],
-  },
+  applicationName: 'Keenan Land & Cattle',
+  openGraph: { siteName: 'Keenan Land & Cattle', type: 'website', locale: 'en_US', images: ['/images/hero.jpg'] },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }) {

@@ -51,7 +51,7 @@ header{
 }
 nav a{color:var(--fg);text-decoration:none;font-weight:600;font-size:.95rem;margin-left:1.5rem;opacity:.92}
 nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
-@media(max-width:640px){nav a:not(.reserve){display:none}}
+@media(max-width:760px){nav a:not(.reserve){display:none}}
 nav .reserve{
   background:var(--barn);padding:.55rem 1rem;border-radius:.25rem;opacity:1;
 }
@@ -273,3 +273,20 @@ footer .wrap .lines{display:flex;flex-direction:column;gap:.35rem}
 .faq details[open] summary::after{content:"–"}
 .faq details p{margin:0 0 1.2rem;max-width:64ch;line-height:1.55;color:var(--muted)}
 .faq details[open] p{color:var(--fg)}
+
+/* ---------- beef shares page ---------- */
+.page{padding-top:2rem}
+.page h1{font-family:var(--font-newsreader),Georgia,serif;font-weight:500;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.05;text-wrap:balance;max-width:22ch}
+.page .lede{margin-top:1rem}
+.page h2{margin-top:3rem;font-size:clamp(1.6rem,3vw,2.4rem)}
+.page p{max-width:64ch;line-height:1.6;margin-top:1rem}
+.share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.75rem}
+@media(max-width:820px){.share-grid{grid-template-columns:1fr}}
+.share{background:var(--card);border:1px solid var(--rule);border-radius:.4rem;padding:1.5rem}
+.share h3{font-family:var(--font-newsreader),Georgia,serif;font-weight:500;font-size:1.7rem}
+.share .price{margin:.35rem 0 1rem;color:var(--barn-dark);font-weight:600}
+.share dl{margin:0}
+.share dt{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:.85rem}
+.share dd{margin:.15rem 0 0;line-height:1.45}
+.share .cta{margin-top:1.25rem;display:inline-block}
+.page .fine{font-size:.9rem;color:var(--muted);max-width:72ch;line-height:1.5;margin-top:1rem}

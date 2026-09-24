@@ -2,13 +2,35 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Header, Footer } from '@/components/Chrome';
 import Availability from '@/components/Availability';
-import { farm, hero, organic, steps, faq, contact } from '@/lib/content';
+import { farm, hero, organic, steps, faq, contact, shares } from '@/lib/content';
+
+export const metadata = {
+  title: 'Organically Raised Beef Shares in Caledonia, NY | Keenan Land & Cattle',
+  description: 'Quarter, half, and whole beef shares from a small family farm in Caledonia, NY. Cattle raised on our own organic pasture and hay with certified organic grain. See what\'s available and request a share.',
+  alternates: { canonical: 'https://keenanfarm.com/' },
+};
 
 export const revalidate = 300;
 
 export default function Home() {
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org', '@type': 'LocalBusiness', '@id': 'https://keenanfarm.com/#business',
+      name: farm.legalName, url: 'https://keenanfarm.com', telephone: '+1-585-734-6458',
+      image: 'https://keenanfarm.com/images/hero.jpg', logo: 'https://keenanfarm.com/images/logo.png',
+      description: 'Small family farm in Caledonia, NY selling quarter, half, and whole beef shares. Cattle raised on organic pasture and hay with certified organic grain.',
+      address: { '@type': 'PostalAddress', addressLocality: 'Caledonia', addressRegion: 'NY', addressCountry: 'US' },
+      areaServed: ['Caledonia NY', 'Livingston County NY', 'Monroe County NY', 'Genesee County NY', 'Rochester NY'],
+      makesOffer: shares.map((s) => ({ '@type': 'Offer', name: `${s.label} beef share`, priceSpecification: { '@type': 'UnitPriceSpecification', price: s.pricePerLb, priceCurrency: 'USD', unitText: 'per pound hanging weight' }, url: 'https://keenanfarm.com/beef-shares' })),
+    },
+    {
+      '@context': 'https://schema.org', '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ];
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Header />
 
       <section className="hero">
@@ -21,7 +43,7 @@ export default function Home() {
           style={{ objectFit: 'cover', objectPosition: 'center 68%' }}
         />
         <div className="wrap">
-          <h1>Organically<br />Raised Beef</h1>
+          <h1>Organically Raised Beef Shares<br />in Caledonia, NY</h1>
           <div className="creed">
             <p>{hero.sub}</p>
             <p className="sub2">{hero.sub2}</p>
